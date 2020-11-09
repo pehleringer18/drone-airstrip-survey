@@ -530,7 +530,6 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="xUu-MS-0ag"/>
         <segue reference="psH-da-nKg"/>
     </inferredMetricsTieBreakers>
     <resources>

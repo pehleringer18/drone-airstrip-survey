@@ -110,8 +110,9 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
      two waypoints that the user cfan add. Later on, we add the rest of the waypoints
      automatically to create the "box" shape. */
     @IBAction func longPressAddWayPoint(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        print("Starting longPressAddWayPoint()...")
         // TODO: when create box, I have this as 4. For testing purposes, it is now 100
-        let MAX_WAYPOINT_NUM = 2
+        let MAX_WAYPOINT_NUM = 100  // originally I assumed the issue was not enough waypoints
         
         if gestureRecognizer.state == UIGestureRecognizer.State.began {
             let touchPoint: CGPoint = gestureRecognizer.location(in: mapView)
@@ -140,13 +141,14 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
             
         }
     
+        print("...Finished longPressAddWayPoint()")
     }
     
     /* the user longPresses the screen to add two waypoints which are the ends
      of box. This method fills out the rest of the "box" shape automatically. The box has a predetermined
      width and the only thing the user can change is the length. As of now,
      if the user want to move the box, he must clear all the waypoints and start again. Make the runway approx. 60 meters wide.*/
-    func addWaypointsInBoxShape(cornersOfBox: [DJIWaypoint]) {
+//    func addWaypointsInBoxShape(cornersOfBox: [DJIWaypoint]) {
 //         iterate through the waypoints, add the corresponding amount to the lat and long to add a new waypoint in the correct direction.
         
         
@@ -160,46 +162,57 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
 //
 //
             // for testing, add the new annotation on the map
-            self.showAlertViewWithTitle(title: "spicy", withMessage: "Got here.");
+//            self.showAlertViewWithTitle(title: "spicy", withMessage: "Got here.");
 //        addAnnotationOnLocation(pointedCoordinate: sonCoordinate)
 //            }
         
-        let x1 = cornersOfBox[0].coordinate.longitude
-        let x2 = cornersOfBox[1].coordinate.longitude
-        let y1 = cornersOfBox[0].coordinate.latitude
-        let y2 = cornersOfBox[1].coordinate.latitude
 
-        let horizontalDistance = abs(x2 - x1)
-        let verticalDistance = abs(y2 - y1)
+    func addWaypointsInBoxShape(cornersOfBox: [DJIWaypoint]) {
+            print("starting addWaypointsInBoxShape()...")
 
-        let numHorizontalPictures: Int = 3
-        let numVerticalPictures: Int = 3
+            let x1 = cornersOfBox[0].coordinate.longitude
+            let x2 = cornersOfBox[1].coordinate.longitude
+            let y1 = cornersOfBox[0].coordinate.latitude
+            let y2 = cornersOfBox[1].coordinate.latitude
 
-        let hSpace = horizontalDistance/Double(numHorizontalPictures)
-        let vSpace = verticalDistance/Double(numVerticalPictures)
+            let numHorizontalPictures: Int = 3
+            let numVerticalPictures: Int = 3
 
-        var xcoord: CLLocationDegrees
-        var ycoord: CLLocationDegrees
-        var newCoord = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+            let hSpace = (x2 - x1)/Double(numHorizontalPictures-1)
+            let vSpace = (y2 - y1)/Double(numVerticalPictures-1)
 
-        for i in 0...(numHorizontalPictures - 1)
-        {
-            xcoord = x1 + Double(i) * hSpace
-            for j in 0...(numVerticalPictures - 1)
+            var xcoord: CLLocationDegrees
+            var ycoord: CLLocationDegrees
+            var newCoord = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+
+            for i in 0...(numHorizontalPictures-1)
             {
-                if (i % 2 == 0)
+                xcoord = x1 + Double(i) * hSpace
+                for j in 0...(numVerticalPictures-1)
                 {
-                    ycoord = y1 + Double(j) * vSpace
+                    if (i % 2 == 0)
+                    {
+                        ycoord = y1 + Double(j) * vSpace
+                    }
+                    else
+                    {
+                        ycoord = y2 - Double(j) * vSpace
+                    }
+                    newCoord = CLLocationCoordinate2D(latitude: ycoord, longitude: xcoord)
+                    
+                    print("Latitude: \(newCoord.latitude) \nLongitude:  \(newCoord.longitude)")
+                    
+                    
+                    
+                    addAnnotationOnLocation(pointedCoordinate: newCoord, waypointName: String(i*numVerticalPictures + j))
+                    let waypoint: DJIWaypoint = DJIWaypoint.init(coordinate: newCoord)
+                    waypoint.altitude = 50
+                    waypoint.speed = 10
+                    mission.add(waypoint)
                 }
-                else
-                {
-                    ycoord = y2 - Double(j) * vSpace
-                }
-                newCoord = CLLocationCoordinate2D(latitude: xcoord, longitude: ycoord)
-                addAnnotationOnLocation(pointedCoordinate: newCoord)
             }
+            print("...Finished addWaypointsInBoxShape()")
         }
-    }
     
     
     // clear all the waypoints from the mission
@@ -213,17 +226,24 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // adds the waypoint symbol on the map
-    func addAnnotationOnLocation(pointedCoordinate: CLLocationCoordinate2D) {
+    func addAnnotationOnLocation(pointedCoordinate: CLLocationCoordinate2D, waypointName: String = "waypoint") {
+        print("Starting addAnnotationOnLocation()...")
+        
         let annotation = MKPointAnnotation()
         annotation.coordinate = pointedCoordinate
-        annotation.title = "waypoint"
+        annotation.title = waypointName
+        
         mapView.addAnnotation(annotation)
+        
+        
+        print("... finished addAnnotationsOnLocation()")
     }
     
 
     
     // after the waypoints are added to the map, it takes the coordinates and loads the mission, uploads the mission then starts it.
     @IBAction func loadTheMission(_ sender: Any) {
+        print("~~~~~\nStarting loadTheMission...")
         let MIN_WAYPOINT_NUM = 2
         print("spicy!")
         
@@ -232,8 +252,9 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
             showAlertViewWithTitle(title: "Two waypoints are required", withMessage: "You must add markers which are the corners of the box.")
         } else {
             // call the method to create a "box" shape of waypoints
-            showAlertViewWithTitle(title: "spicy", withMessage: "super spicy")
             addWaypointsInBoxShape(cornersOfBox: mission.allWaypoints())
+            showAlertViewWithTitle(title: "spicy", withMessage: "super spicy") // I moved the alert to after to only see this after the waypoints should've been calculated
+            print("just finished addWaypointsInBoxShape()")
         }
         
         
@@ -253,6 +274,7 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
 
         guard let missionOperator:DJIWaypointMissionOperator = missionControl.waypointMissionOperator() else {
             showAlertViewWithTitle(title: "Error", withMessage: "Couldn't get waypoint operator!")
+            
             return
         }
         
@@ -311,6 +333,7 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
                 } as DJICompletionBlock)
             }
         }
+        print("...Finished loadTheMission()")
     }
     // button to start the mission once it's loaded
     
@@ -353,9 +376,12 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
     
     // show the message as a pop up window in the app
     func showAlertViewWithTitle(title:String, withMessage message:String ) {
+        print("Starting showAlertViewWithTitle()...")
+        
         let alert:UIAlertController = UIAlertController(title:title, message:message, preferredStyle:UIAlertController.Style.alert)
         let okAction:UIAlertAction = UIAlertAction(title:"Ok", style:UIAlertAction.Style.`default`, handler:nil)
         alert.addAction(okAction)
         self.present(alert, animated:true, completion:nil)
+        print("...Finished showAlertWithTitle()")
     }
 }
