@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		392CE5D6255E0E7C00EE8145 /* AProck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392CE5C82559FE7700EE8145 /* AProck.swift */; };
 		3970DA49254A7FBF003F8076 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3970DA48254A7FBF003F8076 /* Main.storyboard */; };
 		71881C2AEBA25CB2458C61A4 /* Pods_MAF2_MAF2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB43BD168E3F1887010D8D90 /* Pods_MAF2_MAF2UITests.framework */; };
 		846F33A523F24576002EAA1C /* DroneControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846F33A423F24576002EAA1C /* DroneControl.swift */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		38501DFCBDB7E504AE6F8DD5 /* Pods_MAF2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MAF2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		392CE5C82559FE7700EE8145 /* AProck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AProck.swift; sourceTree = "<group>"; };
 		3970DA48254A7FBF003F8076 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		845A7E8E24254F0900DC93D6 /* FFmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FFmpeg.framework; path = Pods/DJIWidget/FFmpeg/FFmpeg.framework; sourceTree = "<group>"; };
 		845A7E9224254F5700DC93D6 /* DJIWidget */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DJIWidget; path = Pods/DJIWidget/DJIWidget; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				84D98B9E2341A0D400433960 /* Assets.xcassets */,
 				84D98BA02341A0D400433960 /* LaunchScreen.storyboard */,
 				84D98BA32341A0D400433960 /* Info.plist */,
+				392CE5C82559FE7700EE8145 /* AProck.swift */,
 				84D98BAB2341A0D400433960 /* MAF2Tests */,
 			);
 			path = MAF2;
@@ -495,6 +498,7 @@
 				8499544F236E0BFE007D3AF1 /* RoundButton.swift in Sources */,
 				84D98B982341A0D400433960 /* AppDelegate.swift in Sources */,
 				84D9446D236AA1B000FFF8C5 /* ContentView.swift in Sources */,
+				392CE5D6255E0E7C00EE8145 /* AProck.swift in Sources */,
 				846F33A523F24576002EAA1C /* DroneControl.swift in Sources */,
 				84D9446B236AA17F00FFF8C5 /* SceneDelegate.swift in Sources */,
 				846F33A723F26586002EAA1C /* ConnectViewController.swift in Sources */,

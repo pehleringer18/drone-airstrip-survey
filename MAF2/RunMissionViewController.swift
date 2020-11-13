@@ -245,7 +245,7 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func loadTheMission(_ sender: Any) {
         print("~~~~~\nStarting loadTheMission...")
         let MIN_WAYPOINT_NUM = 2
-        print("spicy!")
+        // print("spicy!")
         
 //         once there are four waypoints, call the box method to add the others. if less than four, print message to add more
         if (mission.waypointCount < MIN_WAYPOINT_NUM) {
@@ -253,7 +253,7 @@ class RunMissionViewController: UIViewController, CLLocationManagerDelegate {
         } else {
             // call the method to create a "box" shape of waypoints
             addWaypointsInBoxShape(cornersOfBox: mission.allWaypoints())
-            showAlertViewWithTitle(title: "spicy", withMessage: "super spicy") // I moved the alert to after to only see this after the waypoints should've been calculated
+//            showAlertViewWithTitle(title: "spicy", withMessage: "super spicy") // I moved the alert to after to only see this after the waypoints should've been calculated
             print("just finished addWaypointsInBoxShape()")
         }
         
